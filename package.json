@@ -1,0 +1,21 @@
+{
+  "name": "angularupload",
+  "version": "1.0.0",
+  "description": "Angular project with a button to upload docs with the use of base64.",
+  "scripts": {
+    "lite": "lite-server �port 10001",
+    "start": "npm run lite"
+  },
+  "author": "Mubaarak Hassan",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^1.3.1"
+  },
+  "dependencies": {
+    "npm-http-server": "^4.3.0",
+    "azure-arm-resource": "^1.6.1-preview",
+    "ms-rest": "^1.15.5",
+    "ms-rest-azure": "^1.15.5"
+  },
+  "main": "app.js"
+}

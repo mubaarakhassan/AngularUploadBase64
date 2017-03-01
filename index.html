@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html ng-app="AngularUpload" ng-controller="MainController">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-base64/angular-base64.js"></script>
+    <script src="/bower_components/angular-route/angular-route.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js"></script>
+    <script src="services/uploadservice.js"></script>
+    <script src="MainController.js"></script>
+  </head>
+  <body>
+    
+    <div>
+     <div class="container"> 
+      <h1> Angular upload with AngularBase64</h1> 
+      <h4> Select a file </h4>
+      <div> 
+        <form name="myform">
+          <input type="file" name="myfield" ng-model="file.value" onchange="angular.element(this).scope().uploadFile()">
+      </div>
+      <br>   
+      <b>File Value:</b>
+        <table class="table table-bordered table-striped">
+          <tr>
+            <th>filename</th>
+            <th>filetype</th>
+            <th>filesize</th>
+            <th>base64</th>
+          </tr>
+          <tr ng-show="file" >
+            <td>{{file.name}}</td>
+            <td>{{file.type}}</td>
+            <td>{{file.size | Filesize}}</td>
+            <td><textarea>{{encodedFile}}</textarea></td>
+          </tr>
+          <tr>
+            <td colspan="4" ng-show="!file">
+              <small><i>No file selected.</i></small>
+            </td>
+          </tr>
+        </table>
+        </form>
+
+        <h4> Place a text </h4>
+        <form ng-submit="uploadTextFile(textfile1)">
+          <input type="search"  placeholder="Encode text" ng-model="textfile1" />
+          <input type="submit" value="Encode" />
+        </form>
+          <br> 
+           <b>Text Value:</b>
+          <table class="table table-bordered table-striped">
+          <tr>
+            <th>text</th>
+            <th>filetype</th>
+            <th>base64</th>
+          </tr>
+          <tr ng-show="textfile1">
+            <td>{{textfile1}}</td>
+            <td>text/plain</td>
+            <td>{{encodedText.substring(0, 30)}}</td>
+          </tr>
+          <tr>
+            <td colspan="4" ng-show="!textfile1">
+              <small><i>No textFile selected.</i></small>
+            </td>
+          </tr>
+        </table>
+
+        <input type="submit" value="Upload" ng-disabled= "!file" ng-click="upload()"/>
+
+          <div style="font-size:large">
+          <br>
+            List of products in the Web API
+        </div>
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <td>Filename</td>
+                    <td>Filetype</td>
+                    <td>Filesize</td>
+                    <td>Base-64</td>
+                    <td>Uploaded date</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="file in files">
+                    <td>{{ file.filename}}</td>
+                    <td>{{ file.fileType }}</td>
+                    <td>{{ file.fileSize | Filesize }}</td>
+                    <td><textarea>{{file.base64}}</textarea></td>
+                    <td>{{ file.releaseDate| date : "medium"  }}</td>
+                </tr>
+            </tbody>
+        </table>
+     </div>
+       
+    
+    </div>
+  </body>
+</html>
+
+
