@@ -2,13 +2,13 @@
 <html ng-app="AngularUpload" ng-controller="MainController">
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
+    <link href="UnnecessaryIcon\favicon.ico" rel="icon" type="image/x-icon" />
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-base64/angular-base64.js"></script>
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <link rel="stylesheet" href="style.css" />
     <script src="app.js"></script>
-    <script src="services/uploadservice.js"></script>
     <script src="MainController.js"></script>
   </head>
   <body>
@@ -87,7 +87,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="file in files">
+                <tr ng-repeat="file in files | orderBy: 'releaseDate' ">
                     <td>{{ file.filename}}</td>
                     <td>{{ file.fileType }}</td>
                     <td>{{ file.fileSize | Filesize }}</td>

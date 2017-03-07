@@ -2,10 +2,10 @@
   var app = angular.module("AngularUpload", ['ngRoute']);
 
   app.config(function($routeProvider){
-     $routeProvider.when("/main", {
+     $routeProvider.when("/index", {
                                   templateUrl: "index.html",
                                   controller: "MainController"
-    }).otherwise({redirectTo:"/main"});
+    }).otherwise({redirectTo:"/index"});
   });
 
 }());
