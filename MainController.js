@@ -35,9 +35,19 @@
         "fileSize": $scope.fileForUpload.size,
         "base64": $scope.base64EncodedFile,
         "releaseDate": new Date()
-      });
-        $scope.files.push(newFile);
-    }   
+      }).$promise.then(function(value){
+        $scope.files = uploadservice.query();
+      })
+    }
+
+     $scope.deleteFile = function (id) {
+      uploadservice.remove({id: id}).$promise.then(
+        function(value){
+          $scope.files = uploadservice.query();
+        }
+      );
+      
+    }    
   };
 
   app.controller("MainController", MainController)

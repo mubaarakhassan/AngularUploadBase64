@@ -102,6 +102,7 @@
             <td>{{ file.fileSize | filterservice }}</td>
             <td><textarea>{{file.base64}}</textarea></td>
             <td>{{ file.releaseDate| date : "medium" }}</td>
+            <td> <a class="btn" ng-click="deleteFile(file.id)">Delete</a></td>
           </tr>
         </tbody>
       </table>
