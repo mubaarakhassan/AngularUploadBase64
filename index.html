@@ -1,106 +1,114 @@
 <!DOCTYPE html>
 <html ng-app="AngularUpload" ng-controller="MainController">
-  <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"> 
-    <link href="UnnecessaryIcon\favicon.ico" rel="icon" type="image/x-icon" />
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-base64/angular-base64.js"></script>
-    <script src="/bower_components/angular-route/angular-route.js"></script>
-    <link rel="stylesheet" href="style.css" />
-    <script src="app.js"></script>
-    <script src="MainController.js"></script>
-  </head>
-  <body>
-    
-    <div>
-     <div class="container"> 
-      <h1> Angular upload with AngularBase64</h1> 
+
+<head>
+  <!-- Style/Other -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link href="favicon\favicon.ico" rel="icon" type="image/x-icon" />
+  <!-- Library Scripts -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-base64/angular-base64.js"></script>
+  <script src="/bower_components/angular-route/angular-route.js"></script>
+  <!-- Application Scripts -->
+  <script src="app.js"></script>
+  <!-- Services -->
+  <script src="services/uploadservice.js"></script>
+  <script src="services/filterservice-filter.js"></script>
+  <script src="errorhandeling/interceptor.js"></script>
+  <!-- Product Controllers -->
+  <script src="MainController.js"></script>
+</head>
+
+<body>
+
+  <div>
+    <div class="container">
+      <h1> Angular upload with AngularBase64</h1>
       <h4> Select a file </h4>
-      <div> 
+      <div>
         <form name="myform">
-          <input type="file" name="myfield" ng-model="file.value" onchange="angular.element(this).scope().uploadFile()">
+          <input type="file" name="myfield"  onchange="angular.element(this).scope().encodeFile()">
       </div>
-      <br>   
+      <br>
       <b>File Value:</b>
-        <table class="table table-bordered table-striped">
-          <tr>
-            <th>filename</th>
-            <th>filetype</th>
-            <th>filesize</th>
-            <th>base64</th>
-          </tr>
-          <tr ng-show="file" >
-            <td>{{file.name}}</td>
-            <td>{{file.type}}</td>
-            <td>{{file.size | Filesize}}</td>
-            <td><textarea>{{encodedFile}}</textarea></td>
-          </tr>
-          <tr>
-            <td colspan="4" ng-show="!file">
-              <small><i>No file selected.</i></small>
-            </td>
-          </tr>
-        </table>
-        </form>
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th>filename</th>
+          <th>filetype</th>
+          <th>filesize</th>
+          <th>base64</th>
+        </tr>
+        <tr ng-show="file">
+          <td>{{file.name}}</td>
+          <td>{{file.type}}</td>
+          <td>{{file.size | filterservice}}</td>
+          <td><textarea>{{encodedFile}}</textarea></td>
+        </tr>
+        <tr>
+          <td colspan="4" ng-show="!file">
+            <small><i>No file selected.</i></small>
+          </td>
+        </tr>
+      </table>
+      </form>
 
-        <h4> Place a text </h4>
-        <form ng-submit="uploadTextFile(textfile1)">
-          <input type="search"  placeholder="Encode text" ng-model="textfile1" />
-          <input type="submit" value="Encode" />
-        </form>
-          <br> 
-           <b>Text Value:</b>
-          <table class="table table-bordered table-striped">
+      <h4> Place a text </h4>
+      <form ng-submit="encodeTextFile(text)">
+        <input type="search" placeholder="Encode text" ng-model="text" />
+        <input type="submit" value="Encode" />
+      </form>
+      <br>
+      <b>Text Value:</b>
+      <table class="table table-bordered table-striped">
+        <tr>
+          <th>text</th>
+          <th>filetype</th>
+          <th>base64</th>
+        </tr>
+        <tr ng-show="text">
+          <td>{{text}}</td>
+          <td>text/plain</td>
+          <td>{{encodedText.substring(0, 30)}}</td>
+        </tr>
+        <tr>
+          <td colspan="4" ng-show="!text">
+            <small><i>No textFile selected.</i></small>
+          </td>
+        </tr>
+      </table>
+
+      <input type="submit" value="Upload" ng-disabled="!file" ng-click="upload()" />
+
+      <div style="font-size:large">
+        <br> List of products in the Web API
+      </div>
+      <table class="table">
+
+        <thead>
           <tr>
-            <th>text</th>
-            <th>filetype</th>
-            <th>base64</th>
+            <td>Filename</td>
+            <td>Filetype</td>
+            <td>Filesize</td>
+            <td>Base-64</td>
+            <td>Uploaded date</td>
           </tr>
-          <tr ng-show="textfile1">
-            <td>{{textfile1}}</td>
-            <td>text/plain</td>
-            <td>{{encodedText.substring(0, 30)}}</td>
+        </thead>
+        <tbody>
+          <tr ng-repeat="file in files | orderBy: 'releaseDate' ">
+            <td>{{ file.filename}}</td>
+            <td>{{ file.fileType }}</td>
+            <td>{{ file.fileSize | filterservice }}</td>
+            <td><textarea>{{file.base64}}</textarea></td>
+            <td>{{ file.releaseDate| date : "medium" }}</td>
           </tr>
-          <tr>
-            <td colspan="4" ng-show="!textfile1">
-              <small><i>No textFile selected.</i></small>
-            </td>
-          </tr>
-        </table>
-
-        <input type="submit" value="Upload" ng-disabled= "!file" ng-click="upload()"/>
-
-          <div style="font-size:large">
-          <br>
-            List of products in the Web API
-        </div>
-        <table class="table">
-
-            <thead>
-                <tr>
-                    <td>Filename</td>
-                    <td>Filetype</td>
-                    <td>Filesize</td>
-                    <td>Base-64</td>
-                    <td>Uploaded date</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="file in files | orderBy: 'releaseDate' ">
-                    <td>{{ file.filename}}</td>
-                    <td>{{ file.fileType }}</td>
-                    <td>{{ file.fileSize | Filesize }}</td>
-                    <td><textarea>{{file.base64}}</textarea></td>
-                    <td>{{ file.releaseDate| date : "medium"  }}</td>
-                </tr>
-            </tbody>
-        </table>
-     </div>
-       
-    
+        </tbody>
+      </table>
     </div>
-  </body>
+
+
+  </div>
+</body>
+
 </html>
-
-

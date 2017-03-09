@@ -1,83 +1,45 @@
-angular.module('AngularUpload', ['base64', 'ngResource', 'filters'])
-  .controller('MainController', function ($scope, $base64, $resource, $http, $window, $rootScope, uploadservice) {
-
+// Code goes here
+(function() {
+  var app = angular.module("AngularUpload");
+  
+  var MainController = function($scope, $base64, $resource, uploadservice) {
+    
     $scope.files = uploadservice.query();
-    $scope.test
-    $scope.testencode
+    $scope.fileForUpload
+    $scope.base64EncodedFile
 
-    $scope.uploadFile = function () {
+    $scope.encodeFile = function () {
       $scope.file = document.querySelector('input[type=file]').files[0];
       $scope.reader = new FileReader();
-      $scope.test = $scope.file;
+      $scope.fileForUpload = $scope.file;
 
       $scope.reader.onload = function () {
-        $scope.encodedFile = $base64.encode($scope.reader.result);
-        $scope.testencode = $scope.encodedFile;
+        $scope.encodedFile = $scope.reader.result;
+        $scope.base64EncodedFile = $scope.encodedFile;
         $scope.$apply();
       }
 
       if ($scope.file) {
-        $scope.reader.readAsBinaryString($scope.file);
+        $scope.reader.readAsDataURL($scope.file);
       }
     }
 
-    $scope.decodeFile = function () {
-      window.alert($base64.decode($scope.myfile.base64));
-    };
-
-    $scope.uploadTextFile = function (textfile1) {
-      $scope.encodedText = $base64.encode(textfile1);
+    $scope.encodeTextFile = function (text) {
+      $scope.encodedText = $base64.encode(text);
     };
 
     $scope.upload = function () {
       var newFile = uploadservice.save({
-        "filename": $scope.test.name,
-        "fileType": $scope.test.type,
-        "fileSize": $scope.test.size,
-        "base64": $scope.testencode,
+        "filename": $scope.fileForUpload.name,
+        "fileType": $scope.fileForUpload.type,
+        "fileSize": $scope.fileForUpload.size,
+        "base64": $scope.base64EncodedFile,
         "releaseDate": new Date()
       });
-  
         $scope.files.push(newFile);
-      
-    }
+    }   
+  };
 
-  })
+  app.controller("MainController", MainController)
 
-angular.module('AngularUpload')
-  .factory('uploadservice', function ($resource) {
-    return $resource('http://base64uploadwebapi.azurewebsites.net/api/files/:id', null,
-      {
-        'update': { method: 'PUT' }
-      });
-  })
-
-angular.module('filters', [])
-  .filter('Filesize', function () {
-    return function (size) {
-      if (isNaN(size))
-        size = 0;
-
-      if (size < 1024)
-        return size + ' Bytes';
-
-      size /= 1024;
-
-      if (size < 1024)
-        return size.toFixed(2) + ' Kb';
-
-      size /= 1024;
-
-      if (size < 1024)
-        return size.toFixed(2) + ' Mb';
-
-      size /= 1024;
-
-      if (size < 1024)
-        return size.toFixed(2) + ' Gb';
-
-      size /= 1024;
-
-      return size.toFixed(2) + ' Tb';
-    };
-  });
+}());
