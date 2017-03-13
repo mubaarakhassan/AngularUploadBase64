@@ -1,5 +1,5 @@
 (function () {
-    var uploadservice = function ($resource) {
+    var uploadservice = function ($resource,cfpLoadingBar) {
         var urlBase = $resource('http://localhost:4444/APM.WebAPI/api/files/:id', { id: '@id' },
             {
                 update: { method: 'PUT' },
@@ -8,6 +8,7 @@
 
 
         var getAllFiles = function () {
+            cfpLoadingBar.complete()
             return urlBase.query();
         }
 
@@ -22,6 +23,7 @@
         }
 
         var removeFile = function (id) {
+            cfpLoadingBar.complete()
             return urlBase.remove({ id: id });
         }
         return {

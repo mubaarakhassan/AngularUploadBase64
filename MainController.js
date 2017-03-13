@@ -2,7 +2,7 @@
 (function () {
   var app = angular.module("AngularUpload");
 
-  var MainController = function ($scope, $base64, $resource, uploadservice) {
+  var MainController = function ($scope, $base64, $resource, uploadservice, cfpLoadingBar) {
 
     $scope.files = uploadservice.getAllFiles();
     var fileForUpload;
@@ -31,8 +31,9 @@
     };
 
     $scope.upload = function () {
+      cfpLoadingBar.start();
       uploadservice.addFile(fileForUpload, base64EncodedFile)
-        
+      
         .$promise.then(
         //success
         function (value) {
@@ -42,49 +43,28 @@
     }
 
     $scope.deleteFile = function (id) {
-      $scope.test = false;
+      cfpLoadingBar.start();
       uploadservice.removeFile(id).$promise.then(
         //success 
         function (value) {
-          $scope.test = true;
+
           $scope.files = uploadservice.getAllFiles();
           $scope.errors = false;
         },
-        function(err){
+        function (err) {
           $scope.errors = true;
           $scope.message = err;
         })
     }
+
+    // $animate.on('enter', document.body,
+    //   function callback(element, phase) {
+    //     // cool we detected an enter animation within the container
+    //     console.log("loading ...");
+    //   });
+
+  
   };
-   app.directive('pageLoader', [
-    '$animate',
-    function($animate) {
-      var loader = angular.element(
-        '<div class="loader"/>'
-      );
-
-      var link = function(s, body) {
-        s.add = function() {
-          $animate.enter(
-            loader, body, null,
-            function() {
-              loader.addClass('loader-waiting');
-            }
-          );
-        };
-
-        s.remove = function() {
-          $animate.leave(loader, function() {
-            loader.removeClass('loader-waiting');
-          });
-        };
-      };
-
-      return {
-        link: link
-      };
-    }
-  ]);
   app.controller("MainController", MainController)
 
 }());

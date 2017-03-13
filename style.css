@@ -6,11 +6,11 @@ body {
 }
 
 .loader {
-    background-color: #da1;
+    background-color: #00b332;
     height: 10px;
-    left: 0;
-    position: fixed;
-    top: 0;
+    left: 379px;
+    position: absolute;
+    top: 150px;
     transition: width 10s ease-out;
     width: 60%;
 }
@@ -21,14 +21,14 @@ body {
 }
 
 .loader.ng-enter-active {
-    width: 30%;
+    width: 100px;
 }
 
 .loader.ng-leave {
     transition: width .2s ease;
-    width: 70%;
+    width: 100px;
 }
 
 .loader.ng-leave-active {
-    width: 100%;
+    width: 1140px;
 }

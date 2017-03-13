@@ -5,25 +5,25 @@
   <!-- Style/Other -->
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel='stylesheet' href='/bower_components/angular-loading-bar/src//loading-bar.css' type='text/css' media='all' />
   <link href="favicon\favicon.ico" rel="icon" type="image/x-icon" />
   <!-- Library Scripts -->
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/angular-base64/angular-base64.js"></script>
   <script src="/bower_components/angular-route/angular-route.js"></script>
-  <script src="/bower_components/angular-animate/angular-animate.js"></script>
+  <script src="/bower_components/angular-loading-bar/src/loading-bar.js"></script>
   <!-- Application Scripts -->
   <script src="app.js"></script>
   <!-- Services -->
   <script src="services/uploadservice.js"></script>
   <script src="services/filterservice-filter.js"></script>
-  <script src="directive/pageloader.js"></script>
   <!-- Product Controllers -->
   <script src="MainController.js"></script>
 </head>
 
-<body page-loader>
-  
+<body>
+
   <div>
     <div class="container">
       <h1> Angular upload with AngularBase64</h1>
@@ -79,10 +79,6 @@
           </td>
         </tr>
       </table>
-<p>
-    <button ng-click="add()">Show</button>
-    <button ng-click="remove()">Hide</button>
-</p>
       <input type="submit" value="Upload" ng-disabled="!file" ng-click="upload()" />
       <div ng-show="errors">
         <h1>Sorry! There was an error!</h1>
@@ -91,28 +87,30 @@
       <div style="font-size:large">
         <br> List of products in the Web API
       </div>
-      <table class="table">
+      <div id="loading-bar-container">
+        <table class="table">
 
-        <thead>
-          <tr>
-            <td>Filename</td>
-            <td>Filetype</td>
-            <td>Filesize</td>
-            <td>Base-64</td>
-            <td>Uploaded date</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="file in files | orderBy: 'releaseDate' ">
-            <td>{{ file.filename}}</td>
-            <td>{{ file.fileType }}</td>
-            <td>{{ file.fileSize | filterservice }}</td>
-            <td><textarea>{{file.base64}}</textarea></td>
-            <td>{{ file.releaseDate| date : "medium" }}</td>
-            <td> <a class="btn" ng-click="deleteFile(file.id)">Delete</a></td>
-          </tr>
-        </tbody>
+          <thead>
+            <tr>
+              <td>Filename</td>
+              <td>Filetype</td>
+              <td>Filesize</td>
+              <td>Base-64</td>
+              <td>Uploaded date</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="file in files | orderBy: 'releaseDate' ">
+              <td>{{ file.filename}}</td>
+              <td>{{ file.fileType }}</td>
+              <td>{{ file.fileSize | filterservice }}</td>
+              <td><textarea>{{file.base64}}</textarea></td>
+              <td>{{ file.releaseDate| date : "medium" }}</td>
+              <td> <a class="btn" ng-click="deleteFile(file.id)">Delete</a></td>
+            </tr>
+          </tbody>
       </table>
+      </div>
     </div>
 
   </div>

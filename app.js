@@ -1,4 +1,4 @@
 (function() {
-  var app = angular.module("AngularUpload", ['base64', 'ngResource', 'filters', 'ngAnimate']);
+  var app = angular.module("AngularUpload", ['base64', 'ngResource', 'filters','cfp.loadingBar']);
 
 }());
