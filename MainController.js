@@ -30,10 +30,27 @@
       $scope.encodedText = $base64.encode(text);
     };
 
+    $scope.downloadFile = function (name,contentType,base64) {
+      var byteCharacters = $base64.decode(base64);
+
+      var byteNumbers = new Array(byteCharacters.length);
+      for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      var blob = new Blob([byteArray], {type: contentType});
+      var downloadLink = angular.element('<a></a>');
+                        downloadLink.attr('href',window.URL.createObjectURL(blob));
+                        downloadLink.attr('download', name);
+			downloadLink[0].click();
+    };
+
     $scope.upload = function () {
       cfpLoadingBar.start();
       uploadservice.addFile(fileForUpload, base64EncodedFile)
-      
+
         .$promise.then(
         //success
         function (value) {
@@ -63,7 +80,7 @@
     //     console.log("loading ...");
     //   });
 
-  
+
   };
   app.controller("MainController", MainController)
 
