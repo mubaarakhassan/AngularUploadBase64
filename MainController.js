@@ -1,21 +1,23 @@
 // Code goes here
-(function() {
+(function () {
   var app = angular.module("AngularUpload");
-  
-  var MainController = function($scope, $base64, $resource, uploadservice) {
-    
-    $scope.files = uploadservice.query();
-    $scope.fileForUpload
-    $scope.base64EncodedFile
+
+  var MainController = function ($scope, $base64, $resource, uploadservice) {
+
+    $scope.files = uploadservice.getAllFiles();
+    var fileForUpload;
+    var base64EncodedFile;
+    $scope.errors = false;
+    $scope.test = true;
 
     $scope.encodeFile = function () {
       $scope.file = document.querySelector('input[type=file]').files[0];
       $scope.reader = new FileReader();
-      $scope.fileForUpload = $scope.file;
+      fileForUpload = $scope.file;
 
       $scope.reader.onload = function () {
-        $scope.encodedFile = $scope.reader.result;
-        $scope.base64EncodedFile = $scope.encodedFile;
+        $scope.encodedFile = $scope.reader.result.substr($scope.reader.result.indexOf(",") + 1)
+        base64EncodedFile = $scope.encodedFile;
         $scope.$apply();
       }
 
@@ -29,27 +31,60 @@
     };
 
     $scope.upload = function () {
-      var newFile = uploadservice.save({
-        "filename": $scope.fileForUpload.name,
-        "fileType": $scope.fileForUpload.type,
-        "fileSize": $scope.fileForUpload.size,
-        "base64": $scope.base64EncodedFile,
-        "releaseDate": new Date()
-      }).$promise.then(function(value){
-        $scope.files = uploadservice.query();
-      })
+      uploadservice.addFile(fileForUpload, base64EncodedFile)
+        
+        .$promise.then(
+        //success
+        function (value) {
+          $scope.files = uploadservice.getAllFiles();
+        }
+        );
     }
 
-     $scope.deleteFile = function (id) {
-      uploadservice.remove({id: id}).$promise.then(
-        function(value){
-          $scope.files = uploadservice.query();
-        }
-      );
-      
-    }    
+    $scope.deleteFile = function (id) {
+      $scope.test = false;
+      uploadservice.removeFile(id).$promise.then(
+        //success 
+        function (value) {
+          $scope.test = true;
+          $scope.files = uploadservice.getAllFiles();
+          $scope.errors = false;
+        },
+        function(err){
+          $scope.errors = true;
+          $scope.message = err;
+        })
+    }
   };
+   app.directive('pageLoader', [
+    '$animate',
+    function($animate) {
+      var loader = angular.element(
+        '<div class="loader"/>'
+      );
 
+      var link = function(s, body) {
+        s.add = function() {
+          $animate.enter(
+            loader, body, null,
+            function() {
+              loader.addClass('loader-waiting');
+            }
+          );
+        };
+
+        s.remove = function() {
+          $animate.leave(loader, function() {
+            loader.removeClass('loader-waiting');
+          });
+        };
+      };
+
+      return {
+        link: link
+      };
+    }
+  ]);
   app.controller("MainController", MainController)
 
 }());

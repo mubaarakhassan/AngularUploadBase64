@@ -11,25 +11,26 @@
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/angular-base64/angular-base64.js"></script>
   <script src="/bower_components/angular-route/angular-route.js"></script>
+  <script src="/bower_components/angular-animate/angular-animate.js"></script>
   <!-- Application Scripts -->
   <script src="app.js"></script>
   <!-- Services -->
   <script src="services/uploadservice.js"></script>
   <script src="services/filterservice-filter.js"></script>
-  <script src="errorhandeling/interceptor.js"></script>
+  <script src="directive/pageloader.js"></script>
   <!-- Product Controllers -->
   <script src="MainController.js"></script>
 </head>
 
-<body>
-
+<body page-loader>
+  
   <div>
     <div class="container">
       <h1> Angular upload with AngularBase64</h1>
       <h4> Select a file </h4>
       <div>
         <form name="myform">
-          <input type="file" name="myfield"  onchange="angular.element(this).scope().encodeFile()">
+          <input type="file" name="myfield" onchange="angular.element(this).scope().encodeFile()">
       </div>
       <br>
       <b>File Value:</b>
@@ -78,9 +79,15 @@
           </td>
         </tr>
       </table>
-
+<p>
+    <button ng-click="add()">Show</button>
+    <button ng-click="remove()">Hide</button>
+</p>
       <input type="submit" value="Upload" ng-disabled="!file" ng-click="upload()" />
-
+      <div ng-show="errors">
+        <h1>Sorry! There was an error!</h1>
+        <p>{{ message }}</p>
+      </div>
       <div style="font-size:large">
         <br> List of products in the Web API
       </div>
@@ -107,7 +114,6 @@
         </tbody>
       </table>
     </div>
-
 
   </div>
 </body>
