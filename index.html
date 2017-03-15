@@ -45,7 +45,7 @@
           <td>{{file.name}}</td>
           <td>{{file.type}}</td>
           <td>{{file.size | filterservice}}</td>
-          <td><textarea>{{encodedFile}}</textarea></td>
+          <td><textarea>{{encodedFile.substring(0, 30)}}</textarea></td>
         </tr>
         <tr>
           <td colspan="4" ng-show="!file">
@@ -104,7 +104,7 @@
               <td>{{ file.filename}}</td>
               <td>{{ file.fileType }}</td>
               <td>{{ file.fileSize | filterservice }}</td>
-              <td><textarea>{{file.base64}}</textarea></td>
+              <td><textarea>{{file.base64.substring(0, 30)}}</textarea></td>
               <td>{{ file.releaseDate| date : "medium" }}</td>
               <td><a class="btn" ng-click="downloadFile(file.filename,file.fileType,file.base64)">Download</a></td>
               <td><a class="btn" ng-click="deleteFile(file.id)">Delete</a></td>
