@@ -6,6 +6,7 @@
 
     $scope.files = uploadservice.getAllFiles();
     var fileForUpload;
+   
     var base64EncodedFile;
     $scope.errors = false;
     $scope.test = true;
