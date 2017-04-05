@@ -23,7 +23,6 @@
 </head>
 
 <body>
-
   <div>
     <div class="container">
       <h1> Angular upload with AngularBase64</h1>
@@ -97,10 +96,12 @@
               <td>Filesize</td>
               <td>Base-64</td>
               <td>Uploaded date</td>
+              <td></td>
+              <td><button type="button" class="btn btn-danger btn-sm" ng-click="deleteSelectedFiles(files)">Delete selected file</button></td>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="file in files | orderBy: 'releaseDate'| filter:search ">
+            <tr ng-repeat="file in files | orderBy: 'releaseDate'| filter:search " >
               <td>{{ file.filename}}</td>
               <td>{{ file.fileType }}</td>
               <td>{{ file.fileSize | filterservice }}</td>
@@ -108,9 +109,11 @@
               <td>{{ file.releaseDate| date : "medium" }}</td>
               <td><a class="btn" ng-click="downloadFile(file.filename,file.fileType,file.base64)">Download</a></td>
               <td><a class="btn" ng-click="deleteFile(file.id)">Delete</a></td>
+              <td><input type="checkbox" ng-click="file.isChecked=!file.isChecked" > </td>
             </tr>
           </tbody>
       </table>
+      <pre>{{files | json}}</pre>
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 (function () {
     var uploadservice = function ($resource,cfpLoadingBar) {
-        var urlBase = $resource('http://localhost:4444/APM.WebAPI/api/files/:id', { id: '@id' },
+        var urlBase = $resource('http://base64uploadwebapi.azurewebsites.net/api/files/:id', { id: '@id' },
             {
                 update: { method: 'PUT' },
                 remove: { method: 'DELETE' }
